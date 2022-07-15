@@ -1,0 +1,62 @@
+Ansible is open source software provisioning, configuration management, 
+application deployment tool enabling IaaS.
+Ansible is agentless , temporarily connecting remotely via SSH.
+Use declarative language.
+
+Install python3
+Install Ansible = pip install ansisble --user
+ansible --version
+check sshd service running fine =sudo systemctl status sshd
+suo mkdir /etc/ansible
+create file= vim hosts
+Add Remote IP address in this file
+----------------------------------------------------
+[linux]
+10.10.01.156
+10.10.02.223
+
+[linux:vars]
+
+ansible_user=root
+ansible_password=password@123
+
+-----------------------------------------------------
+ssh-keygen
+ssh-copy-id user@Remoteip
+ansible - i /etc/ansible/hosts web -m ping
+------------------------------------------------------
+ansible used for running adhoc cmd line based commands from one machine(where ansible is stored) to remote servers.
+
+ansible - i /etc/ansible/hosts web -m ping 
+This is used for pinging the remote servers from client machine
+-m module
+
+In more organised way you create ansible playbook
+playbook contains plays , plays contains tasks
+playbook written in YAML
+--------------sample.yaml---------------------------------------
+---
+  - name: webserver
+    hosts: linux
+    vars:
+      tablename: foo
+    tasks:
+      - name: ensure nano is there
+	yum:
+	  name: nano
+	  state: version
+      - name: rename table name
+	postgresql:
+	  table: {{ tablename }}
+	  rename: bar
+	
+----------------------------------------------------------
+Run the ansible playbook
+
+ansible-playbook sample.yaml
+----------------------------------------------------------
+yum and postgresql are module name and then we write its arguments
+we can include multiple task under tag tasks
+we can include multiple plays also in same playbook for eg- webserver , db
+
+----------------------------------------------------------
